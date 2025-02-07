@@ -495,7 +495,7 @@ int picoquic_h09_server_callback(picoquic_cnx_t* cnx,
             return 0;
         }
         else {
-            picoquic_set_callback(cnx, picoquic_h09_server_callback, new_ctx);
+            picoquic_set_callback(cnx, picoquic_h09_server_callback, new_ctx, NULL);
             ctx = new_ctx;
         }
     }
@@ -514,7 +514,7 @@ int picoquic_h09_server_callback(picoquic_cnx_t* cnx,
     case picoquic_callback_stateless_reset:
             if (ctx != NULL ) {
                 picoquic_h09_server_callback_delete_context(ctx);
-                picoquic_set_callback(cnx, NULL, NULL);
+                picoquic_set_callback(cnx, NULL, NULL, NULL);
             }
             fflush(stdout);
             return 0;

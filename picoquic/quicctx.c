@@ -4282,10 +4282,11 @@ void picoquic_set_default_stateless_reset_min_interval(picoquic_quic_t* quic, ui
 }
 
 void picoquic_set_callback(picoquic_cnx_t* cnx,
-    picoquic_stream_data_cb_fn callback_fn, void* callback_ctx)
+    picoquic_stream_data_cb_fn callback_fn, void* callback_ctx, uint8_t * application_buffer)
 {
     cnx->callback_fn = callback_fn;
     cnx->callback_ctx = callback_ctx;
+    cnx->application_buffer = application_buffer;
 }
 
 picoquic_stream_data_cb_fn picoquic_get_default_callback_function(picoquic_quic_t* quic)
@@ -4307,6 +4308,16 @@ void * picoquic_get_callback_context(picoquic_cnx_t * cnx)
 {
     return cnx->callback_ctx;
 }
+
+void picoquic_malloc_application_buffer(picoquic_cnx_t * cnx, uint64_t scenario_bytes)
+{
+    cnx->application_buffer = (uint8_t *)malloc(scenario_bytes);
+}
+
+uint8_t * picoquic_get_application_buffer(picoquic_cnx_t * cnx){
+    return (uint8_t *) cnx->application_buffer;
+}
+
 
 picoquic_misc_frame_header_t* picoquic_create_misc_frame(const uint8_t* bytes, size_t length, int is_pure_ack,
     picoquic_packet_context_enum pc)

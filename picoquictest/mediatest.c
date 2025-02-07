@@ -275,7 +275,7 @@ void mediatest_delete_cnx_context(mediatest_cnx_ctx_t* cnx_ctx)
     }
 
     if (cnx_ctx->cnx != NULL) {
-        picoquic_set_callback(cnx_ctx->cnx, NULL, NULL);
+        picoquic_set_callback(cnx_ctx->cnx, NULL, NULL, NULL);
         /* Check whether this is right, versus just delete the context link. */
         picoquic_delete_cnx(cnx_ctx->cnx);
     }
@@ -317,7 +317,7 @@ mediatest_cnx_ctx_t* mediatest_create_cnx_context(mediatest_ctx_t* mt_ctx, picoq
         cnx_ctx->previous_cnx = mt_ctx->last_cnx;
         mt_ctx->last_cnx = cnx_ctx;
         cnx_ctx->mt_ctx = mt_ctx;
-        picoquic_set_callback(cnx, mediatest_callback, cnx_ctx);
+        picoquic_set_callback(cnx, mediatest_callback, cnx_ctx, NULL);
     }
     return cnx_ctx;
 }
@@ -670,7 +670,7 @@ int mediatest_callback(picoquic_cnx_t* cnx,
     */
     if (callback_ctx == NULL || callback_ctx == picoquic_get_default_callback_context(picoquic_get_quic_ctx(cnx))) {
         if (fin_or_event == picoquic_callback_close) {
-            picoquic_set_callback(cnx, NULL, NULL);
+            picoquic_set_callback(cnx, NULL, NULL, NULL);
             return 0;
         }
         else {
@@ -682,7 +682,7 @@ int mediatest_callback(picoquic_cnx_t* cnx,
             }
             else {
                 cnx_ctx->is_server = 1;
-                picoquic_set_callback(cnx, mediatest_callback, cnx_ctx);
+                picoquic_set_callback(cnx, mediatest_callback, cnx_ctx, NULL);
             }
         }
     }
@@ -738,7 +738,7 @@ int mediatest_callback(picoquic_cnx_t* cnx,
                                                   /* Remove the connection from the context, and then delete it */
             cnx_ctx->cnx = NULL;
             mediatest_delete_cnx_context(cnx_ctx);
-            picoquic_set_callback(cnx, NULL, NULL);
+            picoquic_set_callback(cnx, NULL, NULL, NULL);
             break;
         case picoquic_callback_version_negotiation:
             /* The server should never receive a version negotiation response */

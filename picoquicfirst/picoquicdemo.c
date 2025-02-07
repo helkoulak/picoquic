@@ -789,6 +789,7 @@ int quic_client(const char* ip_address_text, int server_port,
     picoquic_cnx_t* cnx_client = NULL;
     picoquic_demo_callback_ctx_t callback_ctx = { 0 };
     uint64_t current_time = 0;
+    uint8_t * application_buffer = NULL;
 
     int is_name = 0;
     size_t client_sc_nb = 0;
@@ -913,11 +914,11 @@ int quic_client(const char* ip_address_text, int server_port,
             picoquic_set_default_pmtud_policy(qclient, picoquic_pmtud_delayed);
 
             if (is_quicperf) {
-                picoquic_set_callback(cnx_client, quicperf_callback, quicperf_ctx);
+                picoquic_set_callback(cnx_client, quicperf_callback, quicperf_ctx, application_buffer);
                 cnx_client->local_parameters.max_datagram_frame_size = 1532;
             }
             else {
-                picoquic_set_callback(cnx_client, picoquic_demo_client_callback, &callback_ctx);
+                picoquic_set_callback(cnx_client, picoquic_demo_client_callback, &callback_ctx, NULL);
 
                 /* Requires TP grease, for interop tests */
                 cnx_client->grease_transport_parameters = 1;

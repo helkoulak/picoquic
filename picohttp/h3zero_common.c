@@ -1782,7 +1782,7 @@ int h3zero_callback(picoquic_cnx_t* cnx,
 			return -1;
 		}
 		else {
-			picoquic_set_callback(cnx, h3zero_callback, ctx);
+			picoquic_set_callback(cnx, h3zero_callback, ctx, NULL);
 			ret = h3zero_protocol_init(cnx);
 		}
 	} else{
@@ -1834,7 +1834,7 @@ int h3zero_callback(picoquic_cnx_t* cnx,
 			else {
 				picoquic_log_app_message(cnx, "Clearing context on connection close (%d)", fin_or_event);
 				h3zero_callback_delete_context(cnx, ctx);
-				picoquic_set_callback(cnx, NULL, NULL);
+				picoquic_set_callback(cnx, NULL, NULL, NULL);
 			}
 			break;
 		case picoquic_callback_version_negotiation:

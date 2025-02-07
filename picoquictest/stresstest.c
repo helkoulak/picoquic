@@ -194,7 +194,7 @@ static int stress_server_callback(picoquic_cnx_t* cnx,
         fin_or_event == picoquic_callback_version_negotiation) {
         if (stress_ctx != NULL) {
             free(stress_ctx);
-            picoquic_set_callback(cnx, stress_server_callback, NULL);
+            picoquic_set_callback(cnx, stress_server_callback, NULL, NULL);
         }
     }
     else if (
@@ -216,7 +216,7 @@ static int stress_server_callback(picoquic_cnx_t* cnx,
             }
             else {
                 memset(new_ctx, 0, sizeof(picoquic_stress_server_callback_ctx_t));
-                picoquic_set_callback(cnx, stress_server_callback, new_ctx);
+                picoquic_set_callback(cnx, stress_server_callback, new_ctx, NULL);
                 stress_ctx = new_ctx;
             }
         }
@@ -384,7 +384,7 @@ static int stress_client_callback(picoquic_cnx_t* cnx,
         /* Free per connection resource */
         if (cb_ctx != NULL) {
             free(cb_ctx);
-            picoquic_set_callback(cnx, stress_client_callback, NULL);
+            picoquic_set_callback(cnx, stress_client_callback, NULL, NULL);
         }
     } else if (fin_or_event == picoquic_callback_almost_ready) {
         /* do nothing */
@@ -487,7 +487,7 @@ int stress_client_set_callback(picoquic_cnx_t* cnx, picoquic_stress_ctx_t * stre
             for (size_t i = 0; i < cb_ctx->max_open_streams; i++) {
                 cb_ctx->stream_id[i] = UINT64_MAX;
             }
-            picoquic_set_callback(cnx, stress_client_callback, cb_ctx);
+            picoquic_set_callback(cnx, stress_client_callback, cb_ctx, NULL);
 
             if ((cb_ctx->message_disconnect_trigger = (uint32_t) picoquic_test_uniform_random(&stress_random_ctx, ((uint64_t)2)* picoquic_stress_max_message_before_drop)) >= picoquic_stress_max_message_before_drop){
                 cb_ctx->message_disconnect_trigger = 0;
@@ -738,7 +738,7 @@ static int stress_handle_packet_prepare(picoquic_stress_ctx_t * stress_ctx, pico
                             ret = stress_debug_break(0);
                         }
                         free(cb_ctx);
-                        picoquic_set_callback(cnx, NULL, NULL);
+                        picoquic_set_callback(cnx, NULL, NULL, NULL);
                     }
                 }
                 else {
@@ -1003,7 +1003,7 @@ static void stress_delete_client_context(int client_index, picoquic_stress_ctx_t
             cb_ctx = (picoquic_stress_client_callback_ctx_t*)
                 picoquic_get_callback_context(c_ctx->qclient->cnx_list);
             free(cb_ctx);
-            picoquic_set_callback(c_ctx->qclient->cnx_list, NULL, NULL);
+            picoquic_set_callback(c_ctx->qclient->cnx_list, NULL, NULL, NULL);
             picoquic_delete_cnx(c_ctx->qclient->cnx_list);
         }
 

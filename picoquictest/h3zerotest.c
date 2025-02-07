@@ -1845,7 +1845,7 @@ static int demo_server_test(char const * alpn, picoquic_stream_data_cb_fn server
     if (ret == 0) {
         picoquic_set_alpn_select_fn(test_ctx->qserver, picoquic_demo_server_callback_select_alpn);
         picoquic_set_default_callback(test_ctx->qserver, server_callback_fn, server_param);
-        picoquic_set_callback(test_ctx->cnx_client, picoquic_demo_client_callback, &callback_ctx);
+        picoquic_set_callback(test_ctx->cnx_client, picoquic_demo_client_callback, &callback_ctx, NULL);
         if (ret == 0) {
             ret = picoquic_start_client_cnx(test_ctx->cnx_client);
         }
@@ -3066,7 +3066,7 @@ http_stress_client_context_t* http_stress_client_create(size_t client_id, uint64
 
                 ret = picoquic_demo_client_initialize_context(&ctx->callback_ctx, http_stress_scenario_list[scenario_id].sc, http_stress_scenario_list[scenario_id].sc_nb, alpn, 1 /* No disk!*/, 0);
                 if (ret == 0) {
-                    picoquic_set_callback(ctx->cnx_client, picoquic_demo_client_callback, &ctx->callback_ctx);
+                    picoquic_set_callback(ctx->cnx_client, picoquic_demo_client_callback, &ctx->callback_ctx, NULL);
                     ctx->callback_ctx.no_print = 1;
                 }
             }
@@ -3694,7 +3694,7 @@ static int h3_grease_test_one(int server_test)
     if (ret == 0) {
         picoquic_set_alpn_select_fn(test_ctx->qserver, picoquic_demo_server_callback_select_alpn);
         picoquic_set_default_callback(test_ctx->qserver, h3zero_callback, server_param);
-        picoquic_set_callback(test_ctx->cnx_client, picoquic_demo_client_callback, &callback_ctx);
+        picoquic_set_callback(test_ctx->cnx_client, picoquic_demo_client_callback, &callback_ctx, NULL);
         if (ret == 0) {
             ret = picoquic_start_client_cnx(test_ctx->cnx_client);
         }
@@ -3976,7 +3976,7 @@ int demo_ticket_test_one(char const* alpn, uint32_t proposed_version,
         }
     }
 
-    picoquic_set_callback(cnx, NULL, NULL);
+    picoquic_set_callback(cnx, NULL, NULL, NULL);
     picoquic_test_delete_minimal_cnx(&quic, &cnx);
 
     return ret;
@@ -4062,7 +4062,7 @@ int demo_error_too_long()
     }
 
     picoquic_demo_client_delete_context(&callback_ctx);
-    picoquic_set_callback(cnx, NULL, NULL);
+    picoquic_set_callback(cnx, NULL, NULL, NULL);
     picoquic_test_delete_minimal_cnx(&quic, &cnx);
 
     return ret;
@@ -4094,7 +4094,7 @@ int demo_error_repeat()
     }
 
     picoquic_demo_client_delete_context(&callback_ctx);
-    picoquic_set_callback(cnx, NULL, NULL);
+    picoquic_set_callback(cnx, NULL, NULL, NULL);
     picoquic_test_delete_minimal_cnx(&quic, &cnx);
 
     return ret;
@@ -4140,7 +4140,7 @@ int demo_error_sanitize()
     }
 
     picoquic_demo_client_delete_context(&callback_ctx);
-    picoquic_set_callback(cnx, NULL, NULL);
+    picoquic_set_callback(cnx, NULL, NULL, NULL);
     picoquic_test_delete_minimal_cnx(&quic, &cnx);
 
     return ret;
@@ -4183,7 +4183,7 @@ int demo_error_callback(picoquic_call_back_event_t fin_or_event, uint64_t stream
     }
 
     picoquic_demo_client_delete_context(&callback_ctx);
-    picoquic_set_callback(cnx, NULL, NULL);
+    picoquic_set_callback(cnx, NULL, NULL, NULL);
     picoquic_test_delete_minimal_cnx(&quic, &cnx);
 
     return ret;
@@ -4240,7 +4240,7 @@ int demo_error_double()
     }
 
     picoquic_demo_client_delete_context(&callback_ctx);
-    picoquic_set_callback(cnx, NULL, NULL);
+    picoquic_set_callback(cnx, NULL, NULL, NULL);
     picoquic_test_delete_minimal_cnx(&quic, &cnx);
 
     return ret;

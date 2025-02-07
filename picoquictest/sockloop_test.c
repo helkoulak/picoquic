@@ -393,7 +393,7 @@ int sockloop_test_cnx_config(picoquic_test_tls_api_ctx_t* test_ctx, struct socka
         ret = -1;
     }
     else {
-        picoquic_set_callback(test_ctx->cnx_client, test_api_callback, (void*)&test_ctx->client_callback);
+        picoquic_set_callback(test_ctx->cnx_client, test_api_callback, (void*)&test_ctx->client_callback, NULL);
     }
 
     return ret;

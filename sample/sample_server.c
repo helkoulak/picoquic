@@ -230,7 +230,7 @@ int sample_server_callback(picoquic_cnx_t* cnx,
                 memset(server_ctx, 0, sizeof(sample_server_ctx_t));
                 server_ctx->default_dir = "";
             }
-            picoquic_set_callback(cnx, sample_server_callback, server_ctx);
+            picoquic_set_callback(cnx, sample_server_callback, server_ctx, NULL);
         }
     }
 
@@ -345,7 +345,7 @@ int sample_server_callback(picoquic_cnx_t* cnx,
         case picoquic_callback_application_close: /* Received application close */
             /* Delete the server application context */
             sample_server_delete_context(server_ctx);
-            picoquic_set_callback(cnx, NULL, NULL);
+            picoquic_set_callback(cnx, NULL, NULL, NULL);
             break;
         case picoquic_callback_version_negotiation:
             /* The server should never receive a version negotiation response */

@@ -9244,7 +9244,7 @@ static int test_local_address_callback(picoquic_cnx_t* cnx,
         if (new_fn != test_local_address_callback || new_ctx != callback_ctx) {
             cb_ctx->callback_fn = new_fn;
             cb_ctx->callback_ctx = new_ctx;
-            picoquic_set_callback(cnx, test_local_address_callback, callback_ctx);
+            picoquic_set_callback(cnx, test_local_address_callback, callback_ctx, NULL);
         }
     }
 
@@ -9329,7 +9329,7 @@ int document_addresses_test()
         memset(&client_address_callback_ctx, 0, sizeof(tls_api_address_are_documented_t));
         client_address_callback_ctx.callback_fn = picoquic_get_callback_function(test_ctx->cnx_client);
         client_address_callback_ctx.callback_ctx = picoquic_get_callback_context(test_ctx->cnx_client);
-        picoquic_set_callback(test_ctx->cnx_client, test_local_address_callback, &client_address_callback_ctx);
+        picoquic_set_callback(test_ctx->cnx_client, test_local_address_callback, &client_address_callback_ctx, NULL);
 
         memset(&server_address_callback_ctx, 0, sizeof(tls_api_address_are_documented_t));
         server_address_callback_ctx.callback_fn = picoquic_get_default_callback_function(test_ctx->qserver);

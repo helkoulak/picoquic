@@ -205,7 +205,7 @@ int picowt_prepare_client_cnx(picoquic_quic_t* quic, struct sockaddr* server_add
     else
     {
         picowt_set_transport_parameters(*p_cnx);
-        picoquic_set_callback(*p_cnx, h3zero_callback, *p_h3_ctx);
+        picoquic_set_callback(*p_cnx, h3zero_callback, *p_h3_ctx, NULL);
         /* Perform the initialization, settings and QPACK streams
          */
         ret = h3zero_protocol_init(*p_cnx);

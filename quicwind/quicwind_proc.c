@@ -141,7 +141,7 @@ static void quicwind_delete_context(picoquic_cnx_t * cnx, quicwind_callback_ctx_
 {
    quicwind_stream_ctx_t * stream_ctx;
 
-    picoquic_set_callback(cnx, NULL, NULL);
+    picoquic_set_callback(cnx, NULL, NULL, NULL);
 
     while ((stream_ctx = ctx->first_stream) != NULL) {
         quicwind_delete_stream_context(ctx, stream_ctx);
@@ -491,7 +491,7 @@ int quicwind_start_connection(picoquic_quic_t * qclient,
 
                 ctx->alpn = picoquic_parse_alpn(alpn);
 
-                picoquic_set_callback(cnx_client, quicwind_callback, ctx);
+                picoquic_set_callback(cnx_client, quicwind_callback, ctx, NULL);
 
                 ret = picoquic_start_client_cnx(cnx_client);
 

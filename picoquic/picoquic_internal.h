@@ -1347,6 +1347,9 @@ typedef struct st_picoquic_cnx_t {
     picoquic_stream_data_cb_fn callback_fn;
     void* callback_ctx;
 
+    uint8_t * application_buffer;
+    u_int64_t last_copied_in_app_buf;
+
     /* connection state, ID, etc. Todo: allow for multiple cnxid */
     picoquic_state_enum cnx_state;
     picoquic_connection_id_t initial_cnxid;

@@ -4604,6 +4604,13 @@ void picoquic_close_immediate(picoquic_cnx_t* cnx)
     }
 }
 
+void print_bytes_sender(uint8_t *bytes, size_t length) {
+    for (size_t i = 0; i < length; i++) {
+        printf("%02X ", bytes[i]);  // Print each byte in two-digit hexadecimal format
+    }
+    printf("\n");  // New line at the end
+}
+
 /* Quic context level call.
  * will send a stateless packet if one is queued, or ask the first connection in
  * the wake list to prepare a packet */

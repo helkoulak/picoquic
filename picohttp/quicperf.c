@@ -28,6 +28,7 @@
 #include "picoquic_utils.h"
 #include "picosplay.h"
 #include "quicperf.h"
+#include "picoquic_internal.h"
 
 /* management of scenarios by the quicperf client 
 * scenario = stream_choice |  stream_choice ';' *scenario
@@ -630,7 +631,9 @@ quicperf_stream_ctx_t* quicperf_init_batch_stream_from_scenario(picoquic_cnx_t* 
         stream_ctx->rep_number = rep_number;
         stream_ctx->post_size = stream_desc->post_size;
         stream_ctx->response_size = stream_desc->response_size;
-
+        //Allocate application buffer
+        picoquic_malloc_application_buffer(cnx,stream_desc->response_size);
+        cnx->last_copied_in_app_buf = 0;
         if (stream_desc->is_infinite) {
             stream_ctx->stop_for_fin = 1;
             for (int x = 0; x < 8; x++) {
@@ -980,12 +983,17 @@ void quicperf_terminate_and_delete_stream(picoquic_cnx_t* cnx, quicperf_ctx_t* c
 }
 
 int quicperf_receive_batch_data(picoquic_cnx_t* cnx, quicperf_ctx_t* ctx, quicperf_stream_ctx_t* stream_ctx,
-    size_t length, picoquic_call_back_event_t fin_or_event)
+    size_t length, picoquic_call_back_event_t fin_or_event, uint8_t* bytes)
 {
     int ret = 0;
 
     stream_ctx->nb_response_bytes += length;
     ctx->data_received += length;
+
+    //Copy chunk of batch data in app buffer
+    memcpy(cnx->application_buffer + cnx->last_copied_in_app_buf, bytes, length);
+    cnx->last_copied_in_app_buf += length;
+
 
     if (stream_ctx->stop_for_fin) {
         if (stream_ctx->nb_response_bytes >= stream_ctx->response_size) {
@@ -1165,7 +1173,7 @@ int quicperf_process_stream_data(picoquic_cnx_t * cnx, quicperf_ctx_t * ctx, qui
                 }
             }
             else {
-                ret = quicperf_receive_batch_data(cnx, ctx, stream_ctx, length, fin_or_event);
+                ret = quicperf_receive_batch_data(cnx, ctx, stream_ctx, length, fin_or_event, bytes);
             }
 
             if (stream_ctx->is_closed || fin_or_event == picoquic_callback_stream_fin) {
@@ -1490,7 +1498,7 @@ int quicperf_callback(picoquic_cnx_t* cnx,
             return -1;
         }
         else {
-            picoquic_set_callback(cnx, quicperf_callback, ctx);
+            picoquic_set_callback(cnx, quicperf_callback, ctx, NULL);
         }
     }
 
@@ -1543,7 +1551,7 @@ int quicperf_callback(picoquic_cnx_t* cnx,
         if (!ctx->is_client) {
             quicperf_delete_ctx(ctx);
         }
-        picoquic_set_callback(cnx, NULL, NULL);
+        picoquic_set_callback(cnx, NULL, NULL, NULL);
         break;
     case picoquic_callback_version_negotiation: /* Not something we would want... */
         break;

@@ -206,7 +206,7 @@ int h3zero_set_test_context(picoquic_quic_t** quic, picoquic_cnx_t** cnx, h3zero
             ret = -1;
         }
         else {
-            picoquic_set_callback(*cnx, h3zero_callback, *h3_ctx);
+            picoquic_set_callback(*cnx, h3zero_callback, *h3_ctx, NULL);
         }
     }
 
@@ -270,7 +270,7 @@ int h3zero_incoming_unidir_test()
             ret = -1;
         }
     }
-    picoquic_set_callback(cnx, NULL, NULL);
+    picoquic_set_callback(cnx, NULL, NULL, NULL);
     h3zero_callback_delete_context(cnx, h3_ctx);
     picoquic_test_delete_minimal_cnx(&quic, &cnx);
 
@@ -401,7 +401,7 @@ int h3zero_unidir_error_test()
     /* receive a settings frame again, after settings received. */
 
     /* clean up everything */
-    picoquic_set_callback(cnx, NULL, NULL);
+    picoquic_set_callback(cnx, NULL, NULL, NULL);
     h3zero_callback_delete_context(cnx, h3_ctx);
     picoquic_test_delete_minimal_cnx(&quic, &cnx);
 
@@ -447,7 +447,7 @@ int h3zero_setting_submit(int is_after_settings, uint64_t frame_type, int expect
     }
 
     /* clean up everything */
-    picoquic_set_callback(cnx, NULL, NULL);
+    picoquic_set_callback(cnx, NULL, NULL, NULL);
     h3zero_callback_delete_context(cnx, h3_ctx);
     picoquic_test_delete_minimal_cnx(&quic, &cnx);
 
@@ -707,7 +707,7 @@ int h3zero_client_data_test_one(client_data_test_spec_t * spec)
     }
 
     /* clean up everything */
-    picoquic_set_callback(cnx, NULL, NULL);
+    picoquic_set_callback(cnx, NULL, NULL, NULL);
     h3zero_callback_delete_context(cnx, h3_ctx);
     picoquic_test_delete_minimal_cnx(&quic, &cnx);
 
@@ -744,7 +744,7 @@ int h3zero_error_client_stream_test()
     }
 
     /* clean up everything */
-    picoquic_set_callback(cnx, NULL, NULL);
+    picoquic_set_callback(cnx, NULL, NULL, NULL);
     h3zero_callback_delete_context(cnx, h3_ctx);
     picoquic_test_delete_minimal_cnx(&quic, &cnx);
 
@@ -935,7 +935,7 @@ int h3zero_capsule_receive_chunks(const uint8_t * capsule_bytes, size_t capsule_
         capsule.capsule_buffer = NULL;
     }
 
-    picoquic_set_callback(cnx, NULL, NULL);
+    picoquic_set_callback(cnx, NULL, NULL, NULL);
     h3zero_callback_delete_context(cnx, h3_ctx);
     picoquic_test_delete_minimal_cnx(&quic, &cnx);
 

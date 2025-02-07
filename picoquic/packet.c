@@ -2227,7 +2227,8 @@ int picoquic_incoming_1rtt(
         }
         else if (ret == 0) {
             picoquic_path_t* path_x = cnx->path[path_id];
-
+          //  printf("Total number of paths available %d\n", sizeof(cnx->path));
+           // printf("****** Receiving on path %d\n", path_x->unique_path_id);
             path_x->if_index_dest = if_index_to;
             cnx->is_1rtt_received = 1;
             picoquic_spin_function_table[cnx->spin_policy].spinbit_incoming(cnx, path_x, ph);

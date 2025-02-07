@@ -524,11 +524,11 @@ int picoquic_demo_client_callback(picoquic_cnx_t* cnx,
                 if (picoquic_demo_client_close_stream(cnx, ctx, stream_ctx)) {
                     fin_stream_id = stream_id;
                     if (stream_id <= 64 && !ctx->no_print) {
-                        fprintf(stdout, "Stream %" PRIu64 " ended after %" PRIu64 " bytes\n",
+                        fprintf(stdout, "???????Stream %" PRIu64 " ended after %" PRIu64 " bytes\n",
                             stream_id, stream_ctx->received_length);
                     }
                     if (stream_ctx->received_length == 0) {
-                        picoquic_log_app_message(cnx, "Stream %" PRIu64 " ended after %" PRIu64 " bytes, ret=0x%x",
+                        picoquic_log_app_message(cnx, "???????Stream %" PRIu64 " ended after %" PRIu64 " bytes, ret=0x%x",
                             stream_id, stream_ctx->received_length, ret);
                     }
                 }

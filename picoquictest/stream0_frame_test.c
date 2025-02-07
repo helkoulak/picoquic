@@ -779,7 +779,7 @@ int stream_output_test()
             ret = -1;
         }
         else {
-            picoquic_set_callback(cnx, stream_output_test_callback, NULL);
+            picoquic_set_callback(cnx, stream_output_test_callback, NULL, NULL);
             /* Set parameter data to a plausible value so tests can run */
             cnx->maxdata_remote = PICOQUIC_DEFAULT_0RTT_WINDOW;
             cnx->remote_parameters.initial_max_stream_data_bidi_remote = PICOQUIC_DEFAULT_0RTT_WINDOW;

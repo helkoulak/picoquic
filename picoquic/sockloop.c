@@ -706,6 +706,12 @@ static int monitor_system_call_duration(packet_loop_system_call_duration_t* sc_d
     return shall_notify;
 }
 
+void print_bytes_loop(uint8_t *bytes, size_t length) {
+    for (size_t i = 0; i < length; i++) {
+        printf("%02X ", bytes[i]);  // Print each byte in two-digit hexadecimal format
+    }
+    printf("\n");  // New line at the end
+}
 
 #ifdef _WINDOWS
     DWORD WINAPI picoquic_packet_loop_v3(LPVOID v_ctx)
@@ -1305,4 +1311,41 @@ void picoquic_delete_network_thread(picoquic_network_thread_ctx_t* thread_ctx)
     }
     /* Free the context */
     free(thread_ctx);
+}
+
+void print_sockaddr(struct sockaddr* sa)
+        {
+    char ip_str[INET6_ADDRSTRLEN]; // Buffer to store IP string
+
+    if (sa->sa_family == AF_INET) {  // IPv4
+        struct sockaddr_in *addr_in = (struct sockaddr_in *)sa;
+        inet_ntop(AF_INET, &(addr_in->sin_addr), ip_str, sizeof(ip_str));
+        printf("IPv4 Address: %s, Port: %d\n", ip_str, ntohs(addr_in->sin_port));
+    }
+    else if (sa->sa_family == AF_INET6) {  // IPv6
+        struct sockaddr_in6 *addr_in6 = (struct sockaddr_in6 *)sa;
+        inet_ntop(AF_INET6, &(addr_in6->sin6_addr), ip_str, sizeof(ip_str));
+        printf("IPv6 Address: %s, Port: %d\n", ip_str, ntohs(addr_in6->sin6_port));
+    }
+    else {
+        printf("Unknown address family: %d\n", sa->sa_family);
+    }
+}
+
+void print_sockaddr_storage(const struct sockaddr_storage *ss, int af, int port) {
+    char ip_str[INET6_ADDRSTRLEN]; // Buffer for IP address string
+
+    if (af == AF_INET) {  // IPv4
+        const struct sockaddr_in *addr4 = (const struct sockaddr_in *)ss;
+        inet_ntop(AF_INET, &(addr4->sin_addr), ip_str, sizeof(ip_str));
+        printf("IPv4 Address: %s, Port: %d\n", ip_str, port);
+    }
+    else if (af == AF_INET6) {  // IPv6
+        const struct sockaddr_in6 *addr6 = (const struct sockaddr_in6 *)ss;
+        inet_ntop(AF_INET6, &(addr6->sin6_addr), ip_str, sizeof(ip_str));
+        printf("IPv6 Address: %s, Port: %d\n", ip_str, port);
+    }
+    else {
+        printf("Unsupported address family: %d\n", af);
+    }
 }

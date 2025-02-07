@@ -239,7 +239,7 @@ int app_limited_callback(picoquic_cnx_t* cnx,
     */
     if (callback_ctx == NULL || callback_ctx == picoquic_get_default_callback_context(picoquic_get_quic_ctx(cnx))) {
         if (fin_or_event == picoquic_callback_close) {
-            picoquic_set_callback(cnx, NULL, NULL);
+            picoquic_set_callback(cnx, NULL, NULL, NULL);
             return 0;
         }
         else {
@@ -251,7 +251,7 @@ int app_limited_callback(picoquic_cnx_t* cnx,
             }
             else {
                 cnx_ctx->is_server = 1;
-                picoquic_set_callback(cnx, app_limited_callback, cnx_ctx);
+                picoquic_set_callback(cnx, app_limited_callback, cnx_ctx, NULL);
             }
         }
     }
@@ -303,7 +303,7 @@ int app_limited_callback(picoquic_cnx_t* cnx,
         case picoquic_callback_application_close: /* Received application close */
                                                   /* Remove the connection from the context, and then delete it */
             cnx_ctx->cnx = NULL;
-            picoquic_set_callback(cnx, NULL, NULL);
+            picoquic_set_callback(cnx, NULL, NULL, NULL);
             break;
         case picoquic_callback_version_negotiation:
             /* The server should never receive a version negotiation response */
@@ -473,7 +473,7 @@ static int app_limited_test_one(app_limited_test_config_t * config)
     if (ret == 0) {
         /* TODO: proper call back context */
         picoquic_set_default_callback(test_ctx->qserver, app_limited_callback, &al_ctx);
-        picoquic_set_callback(test_ctx->cnx_client, app_limited_callback, &al_ctx.client_cnx_ctx);
+        picoquic_set_callback(test_ctx->cnx_client, app_limited_callback, &al_ctx.client_cnx_ctx, NULL);
         if (ret == 0) {
             ret = picoquic_start_client_cnx(test_ctx->cnx_client);
         }

@@ -478,7 +478,7 @@ int quicperf_e2e_test(uint8_t test_id, char const *scenario, uint64_t completion
         test_ctx->cnx_client->local_parameters.max_datagram_frame_size = PICOQUIC_MAX_PACKET_SIZE;
         // picoquic_set_alpn_select_fn(test_ctx->qserver, picoquic_demo_server_callback_select_alpn);
         picoquic_set_default_callback(test_ctx->qserver, quicperf_callback, NULL);
-        picoquic_set_callback(test_ctx->cnx_client, quicperf_callback, quicperf_ctx);
+        picoquic_set_callback(test_ctx->cnx_client, quicperf_callback, quicperf_ctx, NULL);
         if (ret == 0) {
             ret = picoquic_start_client_cnx(test_ctx->cnx_client);
         }

@@ -1045,7 +1045,7 @@ int picoquic_is_0rtt_available(picoquic_cnx_t* cnx);
 int picoquic_is_cnx_backlog_empty(picoquic_cnx_t* cnx);
 
 void picoquic_set_callback(picoquic_cnx_t* cnx,
-    picoquic_stream_data_cb_fn callback_fn, void* callback_ctx);
+    picoquic_stream_data_cb_fn callback_fn, void* callback_ctx, uint8_t * application_buffer);
 
 picoquic_stream_data_cb_fn picoquic_get_default_callback_function(picoquic_quic_t * quic);
 
@@ -1054,6 +1054,10 @@ void * picoquic_get_default_callback_context(picoquic_quic_t * quic);
 picoquic_stream_data_cb_fn picoquic_get_callback_function(picoquic_cnx_t * cnx);
 
 void * picoquic_get_callback_context(picoquic_cnx_t* cnx);
+
+void picoquic_malloc_application_buffer(picoquic_cnx_t* cnx, uint64_t bytes_recv);
+
+uint8_t * picoquic_get_application_buffer(picoquic_cnx_t* cnx);
 
 /* Send extra frames */
 int picoquic_queue_misc_frame(picoquic_cnx_t* cnx, const uint8_t* bytes, size_t length,

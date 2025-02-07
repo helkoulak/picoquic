@@ -324,7 +324,7 @@ int sample_client_callback(picoquic_cnx_t* cnx,
             /* Mark the connection as completed */
             client_ctx->is_disconnected = 1;
             /* Remove the application callback */
-            picoquic_set_callback(cnx, NULL, NULL);
+            picoquic_set_callback(cnx, NULL, NULL, NULL);
             break;
         case picoquic_callback_version_negotiation:
             /* The client did not get the right version.
@@ -514,7 +514,7 @@ static int sample_client_init(char const* server_name, int server_port, char con
             /* Document connection in client's context */
             client_ctx->cnx = *cnx;
             /* Set the client callback context */
-            picoquic_set_callback(*cnx, sample_client_callback, client_ctx);
+            picoquic_set_callback(*cnx, sample_client_callback, client_ctx, NULL);
             /* Client connection parameters could be set here, before starting the connection. */
             ret = picoquic_start_client_cnx(*cnx);
             if (ret < 0) {

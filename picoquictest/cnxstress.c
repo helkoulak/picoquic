@@ -377,7 +377,7 @@ int cnx_stress_callback(picoquic_cnx_t* cnx,
                 return -1;
             }
             else {
-                picoquic_set_callback(cnx, cnx_stress_callback, cnx_ctx);
+                picoquic_set_callback(cnx, cnx_stress_callback, cnx_ctx, NULL);
             }
         }
     }
@@ -408,7 +408,7 @@ int cnx_stress_callback(picoquic_cnx_t* cnx,
     case picoquic_callback_close: /* Received connection close */
     case picoquic_callback_application_close: /* Received application close */
         cnx_stress_callback_delete_context(cnx_ctx);
-        picoquic_set_callback(cnx, NULL, NULL);
+        picoquic_set_callback(cnx, NULL, NULL, NULL);
         break;
     case picoquic_callback_stream_gap:
         /* Gap indication, when unreliable streams are supported */
@@ -526,7 +526,7 @@ int cnx_stress_create_client_cnx(cnx_stress_ctx_t* stress_ctx)
         }
         else {
             /* Set callback */
-            picoquic_set_callback(cnx, cnx_stress_callback, cnx_ctx);
+            picoquic_set_callback(cnx, cnx_stress_callback, cnx_ctx, NULL);
             /* Set keep alive to default value based on timeout. */
             picoquic_enable_keep_alive(cnx, 0);
             /* start the connection */
